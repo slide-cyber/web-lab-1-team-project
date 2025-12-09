@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна 1: ToDo Project</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        ul { margin-top: 20px; }
+        li { padding: 5px 0; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <h1>Мій командний проєкт: ToDo List</h1>
+    <p>Натисніть кнопку, щоб завантажити дані з сервера.</p>
+    
+    <button id="loadBtn">Load items</button>
+    
+    <ul id="itemList"></ul>
+
+    <script>
+        const button = document.getElementById('loadBtn');
+        const list = document.getElementById('itemList');
+
+        button.addEventListener('click', () => {
+            // Звертаємось до нашого сервера
+            fetch('http://localhost:3000/items')
+                .then(response => response.json()) // Перетворюємо відповідь у JSON
+                .then(result => {
+                    // Очищаємо список перед додаванням
+                    list.innerHTML = '';
+                    
+                    // Проходимось по кожному елементу і додаємо в HTML
+                    result.data.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = `${item.id}. ${item.name}`;
+                        list.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Помилка:', error));
+        });
+    </script>
+
+</body>
+</html>
